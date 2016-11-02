@@ -1,0 +1,94 @@
+<project basedir="." default="test" name="TestTasks" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:interlok="uri:interlok" >
+
+
+  <target name="init-ivy" depends="init">
+    <property name="ivy.dir" value="${basedir}/ivy"/>
+    <property name="ivy.jar.file" value="${ivy.dir}/ivy.jar"/>
+    <property name="ivy.install.version" value="2.3.0"/>
+    <property name="ivy.repo" value="nexus-snapshots"/>
+    <property name="ivy.dir" value="${basedir}/ivy"/>
+    <property name="ivy.xml.file" value="${ivy.dir}/ivy.xml"/>
+    <property name="ivy.logging" value="quiet"/>
+    <property name="ivy.report.dir" value="${build.dir}/ivy-report"/>
+    <property name="ivy.publish.bundle.type" value="jar"/>
+    <property name="test.glob.filter" value="*"/>
+
+  </target>
+
+  <target name="download-ivy" depends="init-ivy" unless="skip.ivy.download">
+    <echo message="Downloading ivy..."/>
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+  </target>
+
+  <target name="install-ivy" depends="download-ivy" description="Install ivy">
+    <path id="ivy.lib.path">
+      <pathelement location="${ivy.jar.file}"/>
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+  </target>
+
+  <target name="prepare-ivy" depends="install-ivy" description="Loads all the ivy definitions and settings">
+    <ivy:settings file="${ivy.dir}/ivy-settings.xml" />
+    <ivy:resolve file="${ivy.xml.file}" refresh="true" showprogress="false" log="${ivy.logging}"/>
+
+    <!-- set up main compile classpath using ivy dependecny management -->
+    <ivy:cachepath pathid="classpath.ant-tools" conf="ant" type="jar,zip,bundle,hk2-jar,maven-plugin"/>
+    <ivy:cachepath pathid="classpath.service-tester" conf="compile" type="jar,zip,bundle,hk2-jar,maven-plugin"/>
+    <!--ivy:cachepath pathid="main.classpath" conf="compile,runtime,test,optional" type="jar,zip,bundle,hk2-jar,maven-plugin"/-->
+    <typedef resource="net/sf/antcontrib/antlib.xml" classpathref="classpath.ant-tools" />
+  </target>
+
+  <target name="ivy.macrodef" depends="prepare-ivy">
+    <macrodef name="execute-tests" uri="uri:interlok">
+      <attribute name="testdir"/>
+      <attribute name="resultsdir"/>
+      <sequential>
+        <for param="file">
+          <path>
+            <fileset dir="@{testdir}" includes="*.xml"/>
+          </path>
+          <sequential>
+            <local name="parent.dir"/>
+            <dirname property="parent.dir" file="@{file}"/>
+            <java classname="com.adaptris.tester.runners.TestExecutor" fork="true" failonerror="false" dir="${parent.dir}" resultproperty="java.result">
+              <arg value="@{file}"/>
+              <arg value="@{resultsdir}"/>
+              <sysproperty key="test.glob.filter" value="${test.glob.filter}"/>
+              <classpath refid="classpath.service-tester"/>
+            </java>
+            <condition property="test.failed">
+              <not>
+                <equals arg1="0" arg2="${java.result}"/>
+              </not>
+            </condition>
+          </sequential>
+        </for>
+      </sequential>        
+      <!--java classname="com.adaptris.tester.runners.TestExecutor" fork="true">
+        <arg value="maglis-tests.xml"/>
+        <arg value="results"/>
+        <classpath refid="service.tester.classpath"/>
+      </java-->
+      <!--servicetester resultsDirectory="results">
+        <fileset dir=".">
+          <include name="maglis-tests.xml"/>
+        </fileset>
+      </servicetester-->
+    </macrodef>
+
+    <macrodef name="test-reports" uri="uri:interlok">
+      <attribute name="basedir"/>
+      <attribute name="reportdir"/>
+      <sequential>
+        <junitreport todir="@{basedir}">
+          <fileset dir="@{basedir}">
+            <include name="TEST-*.xml" />
+          </fileset>
+          <report format="frames" todir="@{reportdir}"/>
+        </junitreport>
+      </sequential>
+    </macrodef>
+
+  </target>
+
+</project>

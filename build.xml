@@ -1,0 +1,53 @@
+<project basedir="." default="test" name="interlok-service-test-template" xmlns:interlok="uri:interlok">
+
+  <property file="build.properties"/>
+  <property file="ivy.properties"/>
+  <import file="${basedir}/ivy/ant-ivy-includes.xml"/>
+
+  <target name="init">
+    <property name="adp.version"            value="3.5-SNAPSHOT"/>
+    <property name="test.src.dir"           value="${basedir}/tests/src"/>
+    <property name="test.resources.dir"     value="${basedir}/tests/resources"/>
+    <property name="adapter.src.dir"        value="${basedir}/adapter-config"/>
+
+    <property name="build.dir"              value="${basedir}/target"/>
+    <property name="build.src.dir"          value="${build.dir}/testsrcs"/>
+    <property name="tests.output.dir"       value="${build.dir}/testoutput"/>
+    <property name="html.tests.output.dir"  value="${tests.output.dir}/html"/>
+  </target>
+
+  <target name="clean" depends="init">
+    <!-- check all build dirs exist -->
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="prepare" depends="init, prepare-ivy, ivy.macrodef">
+
+    <!-- check all build dirs exist -->
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.src.dir}"/>
+    <mkdir dir="${tests.output.dir}"/>
+    <mkdir dir="${html.tests.output.dir}"/>
+    <copy todir="${build.src.dir}">
+      <fileset dir="${test.src.dir}">
+        <include name="**/*"/>
+      </fileset>
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
+    </copy>
+  </target>
+  
+  <target name="run-tests" depends="prepare">
+    <interlok:execute-tests testdir="${build.src.dir}" resultsdir="${tests.output.dir}" />
+  </target>
+  
+  <target name="test" depends="run-tests" description="run tests">
+    <interlok:test-reports basedir="${tests.output.dir}" reportdir="${html.tests.output.dir}"/>
+    <fail message="Service tests failed, check output in ${tests.output.dir}" if="test.failed"/>
+  </target>
+
+  <target name="test-no-reports" depends="run-tests" description="Run Tests with No reports">
+  <fail message="Service tests failed, check output in ${tests.output.dir}" if="test.failed"/>
+  </target>
+</project>

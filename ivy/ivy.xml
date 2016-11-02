@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="com.adaptris" module="ant-task-dependencies" revision="1.0-SNAPSHOT" status="release"/>
+
+  <configurations>
+    <conf name="default" visibility="public" description="runtime dependencies and master artifact can be used with this conf"/>
+    <conf name="compile" visibility="public" description="this is the default scope, used if none is specified. Compile dependencies are available in all classpaths."/>
+    <conf name="ant" visibility="private" description="Scope for downloading various jars required to support the build.xml"/>
+  </configurations>
+  <publications>
+  </publications>
+  <dependencies>
+    <!-- For Various ANT Tasks -->
+    <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="ant->default" transitive="false"/>
+    <dependency org="com.adaptris" name="interlok-service-tester" rev="${adp.version}" conf="compile->default" changing="true"/>
+    <dependency org="com.adaptris" name="adp-varsub" rev="${adp.version}" conf="compile->default" changing="true"/>
+    <exclude org="c3p0"/>
+    <exclude org="commons-logging"/>
+    <exclude org="org.apache.ant" artifact="ant"/>
+    <exclude org="org.apache.ant" artifact="ant-launcher"/>
+    <exclude org="ant"/>
+  </dependencies>
+</ivy-module>
