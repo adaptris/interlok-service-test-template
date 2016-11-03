@@ -55,6 +55,9 @@
               <arg value="@{resultsdir}"/>
               <sysproperty key="test.glob.filter" value="${test.glob.filter}"/>
               <classpath refid="classpath.service-tester"/>
+              <classpath>
+                <pathelement location="${test.resources.dir}"/>
+              </classpath>
             </java>
             <condition property="test.failed">
               <not>
@@ -63,17 +66,7 @@
             </condition>
           </sequential>
         </for>
-      </sequential>        
-      <!--java classname="com.adaptris.tester.runners.TestExecutor" fork="true">
-        <arg value="maglis-tests.xml"/>
-        <arg value="results"/>
-        <classpath refid="service.tester.classpath"/>
-      </java-->
-      <!--servicetester resultsDirectory="results">
-        <fileset dir=".">
-          <include name="maglis-tests.xml"/>
-        </fileset>
-      </servicetester-->
+      </sequential>
     </macrodef>
 
     <macrodef name="test-reports" uri="uri:interlok">
