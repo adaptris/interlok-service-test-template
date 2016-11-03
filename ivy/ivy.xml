@@ -12,8 +12,8 @@
   <dependencies>
     <!-- For Various ANT Tasks -->
     <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="ant->default" transitive="false"/>
-    <dependency org="com.adaptris" name="interlok-service-tester" rev="${adp.version}" conf="compile->default" changing="true"/>
-    <dependency org="com.adaptris" name="adp-varsub" rev="${adp.version}" conf="compile->default" changing="true"/>
+    <dependency org="com.adaptris" name="interlok-service-tester" rev="${adapter.version}" conf="compile->default" changing="true"/>
+    <dependency org="com.adaptris" name="adp-varsub" rev="${adapter.version}" conf="compile->default" changing="true"/>
     <exclude org="c3p0"/>
     <exclude org="commons-logging"/>
     <exclude org="org.apache.ant" artifact="ant"/>
