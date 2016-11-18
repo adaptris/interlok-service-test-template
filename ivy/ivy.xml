@@ -12,12 +12,12 @@
   <dependencies>
     <!-- For Various ANT Tasks -->
     <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="ant->default" transitive="false"/>
-    <dependency org="com.adaptris" name="interlok-service-tester" rev="${adapter.version}" conf="compile->default" changing="true"/>
-    <dependency org="com.adaptris" name="adp-varsub" rev="${adapter.version}" conf="compile->default" changing="true"/>
+    <dependency org="com.adaptris" name="interlok-service-tester" rev="${adp-core-version}" conf="compile->default" changing="true"/>
+    <dependency org="com.adaptris" name="adp-varsub" rev="${adp-core-version}" conf="compile->default" changing="true"/>
     <!--xinclude-->
-    <!--dependency org="com.adaptris" name="adp-xinclude" rev="${adapter.version}" conf="compile->default" changing="true"/-->
+    <!--dependency org="com.adaptris" name="adp-xinclude" rev="${adp-core-version}" conf="compile->default" changing="true"/-->
     <!--dynamic port-->
-    <!--dependency org="com.adaptris" name="adp-stubs" rev="${adapter.version}" conf="compile->default" changing="true"/-->
+    <!--dependency org="com.adaptris" name="adp-stubs" rev="${adp-core-version}" conf="compile->default" changing="true"/-->
     <!--wiremock-->
     <!--dependency org="com.github.tomakehurst" name="wiremock-standalone" rev="2.2.2"  conf="compile->default" /-->
     <exclude org="c3p0"/>

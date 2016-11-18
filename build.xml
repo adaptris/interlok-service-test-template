@@ -5,7 +5,6 @@
   <import file="${basedir}/ivy/ant-ivy-includes.xml"/>
 
   <target name="init">
-    <property name="adapter.version"        value="3.5-SNAPSHOT"/>
     <property name="adapter.dir"            value="adapter-config"/>
     <property name="unix.adapter.dir"       value="localhost/opt/afv3/config/${adapter.dir}"/>
     
