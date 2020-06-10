@@ -1,3 +1,6 @@
+
+** This project is archived; we don't use ant anymore, and service-test is now part of projects and the UI **
+
 # Overview #
 
 This is the template project for the configuration of an interlok service test project. The configuration is designed to sit alongside an adapter configuration and allow for unit testing of service configuration of an adapter. 
